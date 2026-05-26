@@ -18,9 +18,12 @@
         integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 
     <style>
+        /* Hide the text inside the box until the box is fully open */
         .date__of__birth span {
-            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.3s;
         }
+        /* Music button */
         #music__btn {
             position: fixed;
             bottom: 20px;
@@ -45,10 +48,18 @@
 
 <body>
 
-    <!-- Music: name your file music.mp3 -->
-    <audio id="eid__music" loop>
+    <!-- 
+        MUSIC FILES — place both in the same folder as index.html:
+        1. music.mp3        ← plays when the page opens
+        2. music_letter.mp3 ← plays when Collect Money is clicked
+    -->
+    <audio id="main__music" loop>
         <source src="music.mp3" type="audio/mpeg">
     </audio>
+    <audio id="letter__music" loop>
+        <source src="music_letter.mp3" type="audio/mpeg">
+    </audio>
+
     <button id="music__btn" title="Toggle Music">
         <i class="fa-solid fa-music"></i>
     </button>
@@ -182,59 +193,54 @@
 </body>
 <script>
     // ── MUSIC ──────────────────────────────────────────────
-    // Name your file:  music.mp3  (same folder as index.html)
-    const music = document.getElementById('eid__music');
-    const musicBtn = document.getElementById('music__btn');
-    const musicIcon = musicBtn.querySelector('i');
-    let musicStarted = false;
+    const mainMusic    = document.getElementById('main__music');
+    const letterMusic  = document.getElementById('letter__music');
+    const musicBtn     = document.getElementById('music__btn');
+    const musicIcon    = musicBtn.querySelector('i');
+    let musicStarted   = false;
 
-    function startMusic() {
-        music.volume = 0.5;
-        music.play().then(() => {
+    function startMainMusic() {
+        mainMusic.volume = 0.5;
+        mainMusic.play().then(() => {
             musicStarted = true;
             musicIcon.className = 'fa-solid fa-pause';
-        }).catch(() => {
-            // Autoplay blocked by browser — will start on first click
-        });
+        }).catch(() => {});
     }
 
-    // Autoplay as soon as page loads
-    window.addEventListener('load', startMusic);
+    // Autoplay on load
+    window.addEventListener('load', startMainMusic);
 
-    // Fallback: if browser blocks autoplay, start on first tap/click anywhere
+    // Fallback: start on first interaction if browser blocked autoplay
     document.addEventListener('click', function handler() {
-        if (!musicStarted) {
-            startMusic();
-        }
+        if (!musicStarted) startMainMusic();
         document.removeEventListener('click', handler);
     });
 
-    // Toggle button
+    // Toggle button pauses/resumes whichever track is active
     musicBtn.addEventListener('click', function (e) {
         e.stopPropagation();
-        if (music.paused) {
-            music.play();
+        const active = !mainMusic.paused ? mainMusic : letterMusic;
+        if (active.paused) {
+            active.play();
             musicIcon.className = 'fa-solid fa-pause';
         } else {
-            music.pause();
+            active.pause();
             musicIcon.className = 'fa-solid fa-music';
         }
     });
 
-    // ── EID MUBARAK — appears AFTER "Happy Eid" animation finishes ──
-    // The last span in .birthday has --t: 5.4s, animation likely ~1s
-    // So "Happy Eid" is fully visible around 6.4s — we start after that
+    // ── EID MUBARAK TEXT ───────────────────────────────────
+    // CSS: .date__of__birth animation starts at 9s, duration 5s
+    // Box is fully open (height:50px) at 9s + 5s = 14s
+    // We wait 14.5s to be safe, then show and type the text
     let datetxt = "Eid Mubarak";
     let charArrDate = datetxt.split('');
     let currentIndex = 0;
     let date__of__birth = document.querySelector(".date__of__birth span");
 
-    // Hide it completely until it's time
-    date__of__birth.style.visibility = 'hidden';
-
-    // Wait for Happy Eid animation to finish (~6.5s) then type out Eid Mubarak
     setTimeout(function () {
-        date__of__birth.style.visibility = 'visible';
+        // Make the span visible now that the box is fully open
+        date__of__birth.style.opacity = '1';
         let timeDatetxt = setInterval(function () {
             if (currentIndex < charArrDate.length) {
                 date__of__birth.textContent += charArrDate[currentIndex];
@@ -247,9 +253,9 @@
                 clearInterval(timeDatetxt);
             }
         }, 120);
-    }, 6500);
+    }, 14500);
 
-    // ── LETTER BOX ─────────────────────────────────────────
+    // ── LETTER BOX — switch music on open/close ────────────
     let datatxtletter = "My love. You are a very special girl. I always silently thank you for coming into my life. Today, I wish you all the best, lots of health, and lots of joy. I always hope we will celebrate many more Eids like this together. Eid Mubarak to you.💕";
     let titleLetter = "To you";
     let charArrDateLetter = datatxtletter.split('');
@@ -262,10 +268,15 @@
     var intervalTitle;
 
     $("#btn__letter").on("click", function () {
+        // Stop main music, start letter music
+        mainMusic.pause();
+        mainMusic.currentTime = 0;
+        letterMusic.volume = 0.5;
+        letterMusic.play();
+        musicIcon.className = 'fa-solid fa-pause';
+
         $(".box__letter").slideDown();
-        setTimeout(function () {
-            $(".letter__border").slideDown();
-        }, 1000);
+        setTimeout(function () { $(".letter__border").slideDown(); }, 1000);
         setTimeout(function () {
             intervalTitle = setInterval(function () {
                 if (currentIndexTitle < charArrTitle.length) {
@@ -302,6 +313,12 @@
     });
 
     $(".close").on("click", function () {
+        // Stop letter music, resume main music
+        letterMusic.pause();
+        letterMusic.currentTime = 0;
+        mainMusic.play();
+        musicIcon.className = 'fa-solid fa-pause';
+
         clearInterval(intervalContent);
         document.querySelector(".title__letter").textContent = "";
         text__letter.textContent = "";
@@ -318,8 +335,8 @@
     });
 
     // ── MAIL BOX ───────────────────────────────────────────
-    let mailBox = document.querySelector('.mail');
-    let boxmail = document.querySelector('.boxMail');
+    let mailBox  = document.querySelector('.mail');
+    let boxmail  = document.querySelector('.boxMail');
     let closeBtn = document.querySelector('.fa-xmark');
 
     mailBox.onclick = function () {

@@ -70,12 +70,7 @@
 
 <body>
 
-    <!--
-        ملفات الموسيقى — ضعها في نفس مجلد index.html:
-        1. music.mp3         تشتغل عند فتح الصفحة
-        2. music_letter.mp3  تشتغل عند الضغط على Collect Money
-    -->
-    <audio id="main__music" loop muted>
+    <audio id="main__music" loop>
         <source src="music.mp3" type="audio/mpeg">
     </audio>
     <audio id="letter__music" loop>
@@ -195,7 +190,6 @@
                     </div>
                     <h4 class="username">To: Noura 💖<span class="underline"></span></h4>
                     <h3>Happy Eid</h3>
-                    <!-- صورة الفلوس تظهر بعد فتح الظرف -->
                     <div class="money__reveal" id="money__reveal">
                         <img src="money.png" alt="Eid Money">
                     </div>
@@ -203,7 +197,14 @@
                 <div class="card2">
                     <div class="card2-content">
                         <h3>Eid Mubarak!</h3>
-                        <h2>                        </h2>
+                        <h2>Happy birthday 🥳🎂🥳 chanda the day you come into my life I was not really much attached to
+                            you but day by day you became close to my heart . And now you are truly my younger sister. I
+                            wish I could remove some of the pain from your life which you are bearing alone. But you're
+                            always welcome 🤗 you can talk anytime you want to talk specially those which you can't say
+                            to others. And this year your all dreams come true . I wish that your
+                            brother could wish you but if couldn't wish on him behalf I am wishing you happy birthday
+                            🎈🎂🎈 sana . Don't be Sad ok be happy 😌
+                        </h2>
                         <div class="imageCute2">
                             <img src="cute2.png" alt="">
                         </div>
@@ -221,15 +222,28 @@
     const musicBtn    = document.getElementById('music__btn');
     const musicIcon   = musicBtn.querySelector('i');
 
-    // تشغيل تلقائي عند فتح الصفحة — muted أولاً لتجاوز قيود المتصفح
-    mainMusic.muted = true;
-    mainMusic.play().then(() => {
-        // بعد ثانية واحدة يرفع الصوت تلقائياً
-        setTimeout(() => {
-            mainMusic.muted = false;
-            mainMusic.volume = 0.5;
-        }, 1000);
-    }).catch(() => {});
+    // دالة لمحاولة تشغيل الموسيقى
+    function playMainMusic() {
+        mainMusic.volume = 0.5;
+        mainMusic.play().then(() => {
+            // إذا نجح التشغيل، نحدث الأيقونة لتكون "إيقاف مؤقت"
+            musicIcon.className = 'fa-solid fa-pause';
+        }).catch(error => {
+            // إذا فشل (بسبب قيود المتصفح)، نحدث الأيقونة لتكون "تشغيل"
+            console.log("Autoplay prevented. Waiting for user interaction.");
+            musicIcon.className = 'fa-solid fa-music';
+        });
+    }
+
+    // محاولة التشغيل فور تحميل النافذة
+    window.addEventListener('load', playMainMusic);
+
+    // محاولة التشغيل عند أول تفاعل للمستخدم مع الصفحة (حل احتياطي لقيود المتصفح)
+    document.body.addEventListener('click', function() {
+        if (mainMusic.paused && letterMusic.paused) {
+             playMainMusic();
+        }
+    }, { once: true }); // يعمل مرة واحدة فقط
 
     // زر التحكم بالموسيقى
     musicBtn.addEventListener('click', function (e) {

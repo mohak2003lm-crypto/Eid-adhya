@@ -4,26 +4,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="title" content="Happy Eid Website 2.0 | Aoudumber Bade">
-    <meta name="github" content="https://github.com/Aoudumber-Bade">
     <title>Mehwish Eid</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
         integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link
-        href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500;700&family=Poppins:wght@400;600&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@500;700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"
         integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 
     <style>
-        /* Hide the text inside the box until the box is fully open */
         .date__of__birth span {
             opacity: 0;
             transition: opacity 0.3s;
         }
-        /* Music button */
         #music__btn {
             position: fixed;
             bottom: 20px;
@@ -43,17 +37,45 @@
             transition: transform 0.2s;
         }
         #music__btn:hover { transform: scale(1.1); }
+
+        @keyframes floatMoney {
+            0%, 100% { transform: translateY(0px) rotate(-3deg); }
+            50%       { transform: translateY(-12px) rotate(3deg); }
+        }
+
+        /* صورة الفلوس — مخفية في البداية */
+        .money__reveal {
+            position: absolute;
+            bottom: -160px;
+            left: 50%;
+            transform: translateX(-50%) scale(0);
+            opacity: 0;
+            transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+            z-index: 10;
+        }
+        /* تظهر بعد فتح الظرف */
+        .money__reveal.show {
+            opacity: 1;
+            transform: translateX(-50%) scale(1);
+            animation: floatMoney 2.5s 0.8s infinite ease-in-out;
+        }
+        .money__reveal img {
+            width: 150px;
+            border-radius: 14px;
+            border: 4px solid white;
+            box-shadow: 0 0 20px rgba(255, 120, 130, 0.7);
+        }
     </style>
 </head>
 
 <body>
 
-    <!-- 
-        MUSIC FILES — place both in the same folder as index.html:
-        1. music.mp3        ← plays when the page opens
-        2. music_letter.mp3 ← plays when Collect Money is clicked
+    <!--
+        ملفات الموسيقى — ضعها في نفس مجلد index.html:
+        1. music.mp3         تشتغل عند فتح الصفحة
+        2. music_letter.mp3  تشتغل عند الضغط على Collect Money
     -->
-    <audio id="main__music" loop>
+    <audio id="main__music" loop muted>
         <source src="music.mp3" type="audio/mpeg">
     </audio>
     <audio id="letter__music" loop>
@@ -61,7 +83,7 @@
     </audio>
 
     <button id="music__btn" title="Toggle Music">
-        <i class="fa-solid fa-music"></i>
+        <i class="fa-solid fa-pause"></i>
     </button>
 
     <div id="wrapper">
@@ -78,11 +100,18 @@
                         <span style="--t: 4.4s;">p</span>
                         <span style="--t: 4.6s;">p</span>
                         <span style="--t: 4.8s;">y</span>
+                        <span style="--t: 5s;">&nbsp;</span>
+                        <span style="--t: 5.2s;">E</span>
+                        <span style="--t: 5.4s;">i</span>
+                        <span style="--t: 5.6s;">d</span>
                     </h1>
                     <h1 class="birthday">
-                        <span style="--t: 5s;">E</span>
-                        <span style="--t: 5.2s;">i</span>
-                        <span style="--t: 5.4s;">d</span>
+                        <span style="--t: 6s;">N</span>
+                        <span style="--t: 6.2s;">u</span>
+                        <span style="--t: 6.4s;">o</span>
+                        <span style="--t: 6.6s;">r</span>
+                        <span style="--t: 6.8s;">r</span>
+                        <span style="--t: 7s;">a</span>
                     </h1>
                     <div class="hat">
                         <img src="./images/hat.png" alt="" width="130">
@@ -166,8 +195,9 @@
                     </div>
                     <h4 class="username">To: Noura 💖<span class="underline"></span></h4>
                     <h3>Happy Eid</h3>
-                    <div class="imageCute">
-                        <img src="cute1.png" alt="">
+                    <!-- صورة الفلوس تظهر بعد فتح الظرف -->
+                    <div class="money__reveal" id="money__reveal">
+                        <img src="money.png" alt="Eid Money">
                     </div>
                 </div>
                 <div class="card2">
@@ -193,30 +223,22 @@
 </body>
 <script>
     // ── MUSIC ──────────────────────────────────────────────
-    const mainMusic    = document.getElementById('main__music');
-    const letterMusic  = document.getElementById('letter__music');
-    const musicBtn     = document.getElementById('music__btn');
-    const musicIcon    = musicBtn.querySelector('i');
-    let musicStarted   = false;
+    const mainMusic   = document.getElementById('main__music');
+    const letterMusic = document.getElementById('letter__music');
+    const musicBtn    = document.getElementById('music__btn');
+    const musicIcon   = musicBtn.querySelector('i');
 
-    function startMainMusic() {
-        mainMusic.volume = 0.5;
-        mainMusic.play().then(() => {
-            musicStarted = true;
-            musicIcon.className = 'fa-solid fa-pause';
-        }).catch(() => {});
-    }
+    // تشغيل تلقائي عند فتح الصفحة — muted أولاً لتجاوز قيود المتصفح
+    mainMusic.muted = true;
+    mainMusic.play().then(() => {
+        // بعد ثانية واحدة يرفع الصوت تلقائياً
+        setTimeout(() => {
+            mainMusic.muted = false;
+            mainMusic.volume = 0.5;
+        }, 1000);
+    }).catch(() => {});
 
-    // Autoplay on load
-    window.addEventListener('load', startMainMusic);
-
-    // Fallback: start on first interaction if browser blocked autoplay
-    document.addEventListener('click', function handler() {
-        if (!musicStarted) startMainMusic();
-        document.removeEventListener('click', handler);
-    });
-
-    // Toggle button pauses/resumes whichever track is active
+    // زر التحكم بالموسيقى
     musicBtn.addEventListener('click', function (e) {
         e.stopPropagation();
         const active = !mainMusic.paused ? mainMusic : letterMusic;
@@ -230,16 +252,13 @@
     });
 
     // ── EID MUBARAK TEXT ───────────────────────────────────
-    // CSS: .date__of__birth animation starts at 9s, duration 5s
-    // Box is fully open (height:50px) at 9s + 5s = 14s
-    // We wait 14.5s to be safe, then show and type the text
     let datetxt = "Eid Mubarak";
     let charArrDate = datetxt.split('');
     let currentIndex = 0;
     let date__of__birth = document.querySelector(".date__of__birth span");
 
+    // يظهر بعد اكتمال animation الصندوق (9s بداية + 5s مدة = 14s) + تأخير إضافي
     setTimeout(function () {
-        // Make the span visible now that the box is fully open
         date__of__birth.style.opacity = '1';
         let timeDatetxt = setInterval(function () {
             if (currentIndex < charArrDate.length) {
@@ -253,9 +272,9 @@
                 clearInterval(timeDatetxt);
             }
         }, 120);
-    }, 14500);
+    }, 16500);
 
-    // ── LETTER BOX — switch music on open/close ────────────
+    // ── COLLECT MONEY — فتح الظرف ─────────────────────────
     let datatxtletter = "My love. You are a very special girl. I always silently thank you for coming into my life. Today, I wish you all the best, lots of health, and lots of joy. I always hope we will celebrate many more Eids like this together. Eid Mubarak to you.💕";
     let titleLetter = "To you";
     let charArrDateLetter = datatxtletter.split('');
@@ -263,12 +282,13 @@
     let currentIndexLetter = 0;
     let currentIndexTitle = 0;
     let text__letter = document.querySelector(".text__letter p");
+    const moneyReveal = document.getElementById('money__reveal');
 
     var intervalContent;
     var intervalTitle;
 
     $("#btn__letter").on("click", function () {
-        // Stop main music, start letter music
+        // إيقاف الأغنية الأولى وتشغيل الثانية
         mainMusic.pause();
         mainMusic.currentTime = 0;
         letterMusic.volume = 0.5;
@@ -313,7 +333,7 @@
     });
 
     $(".close").on("click", function () {
-        // Stop letter music, resume main music
+        // إيقاف أغنية الظرف والرجوع للأغنية الأولى
         letterMusic.pause();
         letterMusic.currentTime = 0;
         mainMusic.play();
@@ -334,7 +354,7 @@
         $(".letter__border").slideUp();
     });
 
-    // ── MAIL BOX ───────────────────────────────────────────
+    // ── MAIL BOX — صورة money.png تظهر بعد فتح الظرف ──────
     let mailBox  = document.querySelector('.mail');
     let boxmail  = document.querySelector('.boxMail');
     let closeBtn = document.querySelector('.fa-xmark');
@@ -342,10 +362,16 @@
     mailBox.onclick = function () {
         mailBox.classList.toggle('active');
         boxmail.classList.add('active');
+        // الصورة تظهر بعد 1.5 ثانية من فتح الظرف (بعد انتهاء أنيميشن الفتح)
+        setTimeout(() => {
+            moneyReveal.classList.add('show');
+        }, 1500);
     };
 
     closeBtn.addEventListener('click', function () {
         boxmail.classList.remove('active');
+        // إخفاء الصورة عند الإغلاق
+        moneyReveal.classList.remove('show');
     });
 </script>
 

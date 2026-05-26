@@ -18,7 +18,9 @@
         integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 
     <style>
-        /* Music player button */
+        .date__of__birth span {
+            visibility: hidden;
+        }
         #music__btn {
             position: fixed;
             bottom: 20px;
@@ -43,7 +45,7 @@
 
 <body>
 
-    <!-- Music -->
+    <!-- Music: name your file music.mp3 -->
     <audio id="eid__music" loop>
         <source src="music.mp3" type="audio/mpeg">
     </audio>
@@ -180,6 +182,7 @@
 </body>
 <script>
     // ── MUSIC ──────────────────────────────────────────────
+    // Name your file:  music.mp3  (same folder as index.html)
     const music = document.getElementById('eid__music');
     const musicBtn = document.getElementById('music__btn');
     const musicIcon = musicBtn.querySelector('i');
@@ -190,20 +193,24 @@
         music.play().then(() => {
             musicStarted = true;
             musicIcon.className = 'fa-solid fa-pause';
-        }).catch(() => {});
+        }).catch(() => {
+            // Autoplay blocked by browser — will start on first click
+        });
     }
 
-    // Try autoplay on load
-    window.addEventListener('load', () => {
-        startMusic();
+    // Autoplay as soon as page loads
+    window.addEventListener('load', startMusic);
+
+    // Fallback: if browser blocks autoplay, start on first tap/click anywhere
+    document.addEventListener('click', function handler() {
+        if (!musicStarted) {
+            startMusic();
+        }
+        document.removeEventListener('click', handler);
     });
 
-    // Fallback: start on first user interaction if autoplay was blocked
-    document.addEventListener('click', () => {
-        if (!musicStarted) startMusic();
-    }, { once: true });
-
-    musicBtn.addEventListener('click', (e) => {
+    // Toggle button
+    musicBtn.addEventListener('click', function (e) {
         e.stopPropagation();
         if (music.paused) {
             music.play();
@@ -214,29 +221,20 @@
         }
     });
 
-    // ── EID MUBARAK TEXT FIX ───────────────────────────────
+    // ── EID MUBARAK — appears AFTER "Happy Eid" animation finishes ──
+    // The last span in .birthday has --t: 5.4s, animation likely ~1s
+    // So "Happy Eid" is fully visible around 6.4s — we start after that
     let datetxt = "Eid Mubarak";
-    let datatxtletter = "My love. You are a very special girl. I always silently thank you for coming into my life. Today, I wish you all the best, lots of health, and lots of joy. I always hope we will celebrate many more Eids like this together. Eid Mubarak to you.💕";
-    let titleLetter = "To you";
     let charArrDate = datetxt.split('');
-    let charArrDateLetter = datatxtletter.split('');
-    let charArrTitle = titleLetter.split('');
     let currentIndex = 0;
-    let currentIndexLetter = 0;
-    let currentIndexTitle = 0;
-
     let date__of__birth = document.querySelector(".date__of__birth span");
-    let text__letter = document.querySelector(".text__letter p");
 
-    // Force the span to be visible
-    if (date__of__birth) {
-        date__of__birth.style.visibility = 'visible';
-        date__of__birth.style.opacity = '1';
-        date__of__birth.style.display = 'inline-block';
-    }
+    // Hide it completely until it's time
+    date__of__birth.style.visibility = 'hidden';
 
-    // Start typing "Eid Mubarak" after 2s (reduced from 4s)
+    // Wait for Happy Eid animation to finish (~6.5s) then type out Eid Mubarak
     setTimeout(function () {
+        date__of__birth.style.visibility = 'visible';
         let timeDatetxt = setInterval(function () {
             if (currentIndex < charArrDate.length) {
                 date__of__birth.textContent += charArrDate[currentIndex];
@@ -248,10 +246,18 @@
                 document.querySelector(".date__of__birth").appendChild(i.cloneNode(true));
                 clearInterval(timeDatetxt);
             }
-        }, 40);
-    }, 2000);
+        }, 120);
+    }, 6500);
 
     // ── LETTER BOX ─────────────────────────────────────────
+    let datatxtletter = "My love. You are a very special girl. I always silently thank you for coming into my life. Today, I wish you all the best, lots of health, and lots of joy. I always hope we will celebrate many more Eids like this together. Eid Mubarak to you.💕";
+    let titleLetter = "To you";
+    let charArrDateLetter = datatxtletter.split('');
+    let charArrTitle = titleLetter.split('');
+    let currentIndexLetter = 0;
+    let currentIndexTitle = 0;
+    let text__letter = document.querySelector(".text__letter p");
+
     var intervalContent;
     var intervalTitle;
 

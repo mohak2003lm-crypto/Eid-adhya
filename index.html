@@ -70,12 +70,7 @@
 
 <body>
 
-    <!--
-        ملفات الموسيقى — ضعها في نفس مجلد index.html:
-        1. music.mp3         تشتغل عند فتح الصفحة
-        2. music_letter.mp3  تشتغل عند الضغط على Collect Money
-    -->
-    <audio id="main__music" loop muted>
+    <audio id="main__music" loop>
         <source src="music.mp3" type="audio/mpeg">
     </audio>
     <audio id="letter__music" loop>
@@ -132,7 +127,7 @@
             <div class="right">
                 <div class="box__account">
                     <div class="image">
-                        <img src="./images/unnamed.png" alt="">
+                        <img src="./images/named.png" alt="">
                     </div>
                     <div class="name">
                         <i class="fa-solid fa-heart"></i>
@@ -191,11 +186,10 @@
             <div class="boxMail-container">
                 <div class="card1">
                     <div class="userImg">
-                        <img src="images/unnamed.png" alt="">
+                        <img src="images/named.png" alt="">
                     </div>
                     <h4 class="username">To: Noura 💖<span class="underline"></span></h4>
                     <h3>Happy Eid</h3>
-                    <!-- صورة الفلوس تظهر بعد فتح الظرف -->
                     <div class="money__reveal" id="money__reveal">
                         <img src="money.png" alt="Eid Money">
                     </div>
@@ -228,15 +222,28 @@
     const musicBtn    = document.getElementById('music__btn');
     const musicIcon   = musicBtn.querySelector('i');
 
-    // تشغيل تلقائي عند فتح الصفحة — muted أولاً لتجاوز قيود المتصفح
-    mainMusic.muted = true;
-    mainMusic.play().then(() => {
-        // بعد ثانية واحدة يرفع الصوت تلقائياً
-        setTimeout(() => {
-            mainMusic.muted = false;
-            mainMusic.volume = 0.5;
-        }, 1000);
-    }).catch(() => {});
+    // دالة لمحاولة تشغيل الموسيقى
+    function playMainMusic() {
+        mainMusic.volume = 0.5;
+        mainMusic.play().then(() => {
+            // إذا نجح التشغيل، نحدث الأيقونة لتكون "إيقاف مؤقت"
+            musicIcon.className = 'fa-solid fa-pause';
+        }).catch(error => {
+            // إذا فشل (بسبب قيود المتصفح)، نحدث الأيقونة لتكون "تشغيل"
+            console.log("Autoplay prevented. Waiting for user interaction.");
+            musicIcon.className = 'fa-solid fa-music';
+        });
+    }
+
+    // محاولة التشغيل فور تحميل النافذة
+    window.addEventListener('load', playMainMusic);
+
+    // محاولة التشغيل عند أول تفاعل للمستخدم مع الصفحة (حل احتياطي لقيود المتصفح)
+    document.body.addEventListener('click', function() {
+        if (mainMusic.paused && letterMusic.paused) {
+             playMainMusic();
+        }
+    }, { once: true }); // يعمل مرة واحدة فقط
 
     // زر التحكم بالموسيقى
     musicBtn.addEventListener('click', function (e) {
@@ -362,7 +369,7 @@
     mailBox.onclick = function () {
         mailBox.classList.toggle('active');
         boxmail.classList.add('active');
-        // )
+        // الصورة تظهر بعد 1.5 ثانية من فتح الظرف (بعد انتهاء أنيميشن الفتح)
         setTimeout(() => {
             moneyReveal.classList.add('show');
         }, 1500);

@@ -1,3 +1,6 @@
+إليك الكود كاملاً ومُحدثاً بدون أي تعليقات أو نصوص توضيحية بداخله. يمكنك نسخه ولصقه مباشرة:
+
+```html
 <!DOCTYPE html>
 <html lang="en">
 
@@ -14,23 +17,72 @@
         integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 
     <style>
-        .date__of__birth span { opacity: 0; transition: opacity 0.3s; }
-        #music__btn { display: none; position: fixed; bottom: 20px; right: 20px; z-index: 9999; background: rgba(255, 255, 255, 0.85); border: none; border-radius: 50%; width: 50px; height: 50px; font-size: 22px; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.2); align-items: center; justify-content: center; transition: transform 0.2s; }
+        .date__of__birth span {
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        #music__btn {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 9999;
+            background: rgba(255, 255, 255, 0.85);
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 22px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s;
+        }
         #music__btn:hover { transform: scale(1.1); }
-        
-        /* التعديل الجديد لصور الفلوس */
-        .money-wrapper { display: flex; flex-direction: column; align-items: center; margin: 20px 0; }
-        .money-img { width: 90%; max-width: 300px; height: auto; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.2); }
-        .money-img:nth-child(2) { margin-top: -80px; z-index: -1; }
+
+        .boxMail.active {
+            display: flex !important;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+        }
+
+        .boxMail-container {
+            width: 100%;
+            max-width: 90vw;
+        }
+
+        .card2 {
+            max-height: 75vh;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        .money-img {
+            width: 90%;
+            max-width: 220px;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            display: block;
+            margin: 15px auto;
+        }
     </style>
 </head>
 
 <body>
 
-    <audio id="main__music" loop muted><source src="music.mp3" type="audio/mpeg"></audio>
-    <audio id="letter__music" loop><source src="music_letter.mp3" type="audio/mpeg"></audio>
+    <audio id="main__music" loop muted>
+        <source src="music.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="letter__music" loop>
+        <source src="music_letter.mp3" type="audio/mpeg">
+    </audio>
 
-    <button id="music__btn" title="Toggle Music"><i class="fa-solid fa-play"></i></button>
+    <button id="music__btn" title="Toggle Music">
+        <i class="fa-solid fa-play"></i>
+    </button>
 
     <div id="wrapper">
         <div class="flag__birthday">
@@ -41,45 +93,114 @@
             <div class="left">
                 <div class="title">
                     <h1 class="happy">
-                        <span style="--t: 4s;">H</span><span style="--t: 4.2s;">a</span><span style="--t: 4.4s;">p</span><span style="--t: 4.6s;">p</span><span style="--t: 4.8s;">y</span>
-                        <span style="--t: 5s;">&nbsp;</span><span style="--t: 5.2s;">E</span><span style="--t: 5.4s;">i</span><span style="--t: 5.6s;">d</span>
+                        <span style="--t: 4s;">H</span>
+                        <span style="--t: 4.2s;">a</span>
+                        <span style="--t: 4.4s;">p</span>
+                        <span style="--t: 4.6s;">p</span>
+                        <span style="--t: 4.8s;">y</span>
+                        <span style="--t: 5s;">&nbsp;</span>
+                        <span style="--t: 5.2s;">E</span>
+                        <span style="--t: 5.4s;">i</span>
+                        <span style="--t: 5.6s;">d</span>
                     </h1>
                     <h1 class="birthday">
-                        <span style="--t: 6s;">N</span><span style="--t: 6.2s;">u</span><span style="--t: 6.4s;">o</span><span style="--t: 6.6s;">r</span><span style="--t: 6.8s;">r</span><span style="--t: 7s;">a</span>
+                        <span style="--t: 6s;">N</span>
+                        <span style="--t: 6.2s;">u</span>
+                        <span style="--t: 6.4s;">o</span>
+                        <span style="--t: 6.6s;">r</span>
+                        <span style="--t: 6.8s;">r</span>
+                        <span style="--t: 7s;">a</span>
                     </h1>
-                    <div class="hat"><img src="./images/hat.png" alt="" width="130"></div>
+                    <div class="hat">
+                        <img src="./images/hat.png" alt="" width="130">
+                    </div>
                 </div>
-                <div class="date__of__birth"><span></span></div>
+                <div class="date__of__birth">
+                    <span></span>
+                </div>
                 <div class="btn">
-                    <button id="btn__letter"><div class="mail">Collect Money <i class="fa-regular fa-envelope"></i></div></button>
+                    <button id="btn__letter">
+                        <div class="mail">
+                            Collect Money
+                            <i class="fa-regular fa-envelope"></i>
+                        </div>
+                    </button>
                 </div>
             </div>
             <div class="right">
                 <div class="box__account">
-                    <div class="image"><img src="./images/named.png" alt=""></div>
-                    <div class="name"><i class="fa-solid fa-heart"></i><span>Dear Noura</span><i class="fa-solid fa-heart"></i></div>
+                    <div class="image">
+                        <img src="./images/named.png" alt="">
+                    </div>
+                    <div class="name">
+                        <i class="fa-solid fa-heart"></i>
+                        <span>Dear Noura</span>
+                        <i class="fa-solid fa-heart"></i>
+                    </div>
+                    <div class="balloon_one">
+                        <img width="100px" src="./images/balloon1.png" alt="">
+                    </div>
+                    <div class="balloon_two">
+                        <img width="100px" src="./images/balloon2.png" alt="">
+                    </div>
+                </div>
+                <div class="cricle">
+                    <div class="text__cricle">
+                        <span style="--i: 1;">E</span>
+                        <span style="--i: 2;">i</span>
+                        <span style="--i: 3;">d</span>
+                        <span style="--i: 4;">-</span>
+                        <span style="--i: 5;">M</span>
+                        <span style="--i: 6;">u</span>
+                        <span style="--i: 7;">b</span>
+                        <span style="--i: 8;">a</span>
+                        <span style="--i: 9;">r</span>
+                        <span style="--i: 10;">a</span>
+                        <span style="--i: 11;">k</span>
+                        <span style="--i: 12;">-</span>
+                    </div>
+                    <i class="fa-solid fa-heart"></i>
                 </div>
             </div>
         </div>
+        <div class="decorate_star star1" style="--t: 15s;"></div>
+        <div class="decorate_star star2" style="--t: 15.2s;"></div>
+        <div class="decorate_star star3" style="--t: 15.4s;"></div>
+        <div class="decorate_star star4" style="--t: 15.6s;"></div>
+        <div class="decorate_star star5" style="--t: 15.8s;"></div>
+        <div class="decorate_flower--one" style="--t: 15s;">
+            <img width="20" src="./images/decorate_flower.png" alt="">
+        </div>
+        <div class="decorate_flower--two" style="--t: 15.3s;">
+            <img width="20" src="./images/decorate_flower.png" alt="">
+        </div>
+        <div class="decorate_flower--three" style="--t: 15.6s;">
+            <img width="20" src="./images/decorate_flower.png" alt="">
+        </div>
+        <div class="decorate_bottom">
+            <img src="./images/decorate.png" alt="" width="100">
+        </div>
+        <div class="smiley__icon">
+            <img src="./images/smiley_icon.png" alt="" width="100">
+        </div>
 
-        <div class="boxMail" id="boxMail">
-            <i class="fa-solid fa-xmark" style="cursor:pointer; position:absolute; top:20px; right:20px; font-size:24px;"></i>
+        <div class="boxMail">
+            <i class="fa-solid fa-xmark"></i>
             <div class="boxMail-container">
                 <div class="card1" style="position: relative; overflow: visible;">
-                    <div class="userImg"><img src="images/named.png" alt=""></div>
-                    <h4 class="username">To: Noura 💖</h4>
+                    <div class="userImg">
+                        <img src="images/named.png" alt="">
+                    </div>
+                    <h4 class="username">To: Noura 💖<span class="underline"></span></h4>
                     <h3>Happy Eid</h3>
                 </div>
                 <div class="card2">
                     <div class="card2-content">
                         <h3>Eid Mubarak!</h3>
-                        
-                        <div class="money-wrapper">
-                            <img src="images/money.png" class="money-img" alt="Money">
-                            <img src="images/money.png" class="money-img" alt="Money">
+                        <img src="money.png" alt="Money" class="money-img">
+                        <div class="imageCute2">
+                            <img src="cute2.png" alt="">
                         </div>
-                        
-                        <div class="imageCute2"><img src="cute2.png" alt=""></div>
                     </div>
                 </div>
             </div>
@@ -88,19 +209,161 @@
 
 </body>
 <script>
-    // ... (نفس السكربت الخاص بك) ...
-    // تأكد فقط من أن كود فتح الظرف هو:
-    const boxmail = document.querySelector('.boxMail');
-    const mailBtn = document.querySelector('.mail');
-    const closeBtn = document.querySelector('.fa-xmark');
+    const mainMusic   = document.getElementById('main__music');
+    const letterMusic = document.getElementById('letter__music');
+    const musicBtn    = document.getElementById('music__btn');
+    const musicIcon   = musicBtn.querySelector('i');
 
-    mailBtn.onclick = function () {
+    mainMusic.play().catch(e => console.log("Autoplay context setup"));
+
+    function activateAudio() {
+        if (mainMusic.muted) {
+            mainMusic.muted = false;
+            mainMusic.volume = 0.5;
+            mainMusic.play().then(() => {
+                musicIcon.className = 'fa-solid fa-pause';
+            });
+        }
+    }
+
+    window.addEventListener('click', activateAudio, { once: true });
+    window.addEventListener('touchstart', activateAudio, { once: true });
+    window.addEventListener('mousemove', activateAudio, { once: true });
+    window.addEventListener('keydown', activateAudio, { once: true });
+
+    musicBtn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        
+        if(mainMusic.muted) {
+            mainMusic.muted = false;
+            mainMusic.volume = 0.5;
+        }
+
+        const active = !mainMusic.paused ? mainMusic : letterMusic;
+        if (active.paused) {
+            active.play();
+            musicIcon.className = 'fa-solid fa-pause';
+        } else {
+            active.pause();
+            musicIcon.className = 'fa-solid fa-music';
+        }
+    });
+
+    let datetxt = "Eid Mubarak";
+    let charArrDate = datetxt.split('');
+    let currentIndex = 0;
+    let date__of__birth = document.querySelector(".date__of__birth span");
+
+    setTimeout(function () {
+        date__of__birth.style.opacity = '1';
+        let timeDatetxt = setInterval(function () {
+            if (currentIndex < charArrDate.length) {
+                date__of__birth.textContent += charArrDate[currentIndex];
+                currentIndex++;
+            } else {
+                let i = document.createElement("i");
+                i.className = "fa-solid fa-star";
+                document.querySelector(".date__of__birth").prepend(i);
+                document.querySelector(".date__of__birth").appendChild(i.cloneNode(true));
+                clearInterval(timeDatetxt);
+            }
+        }, 120);
+    }, 16500);
+
+    let datatxtletter = "My love. You are a very special girl. I always silently thank you for coming into my life. Today, I wish you all the best, lots of health, and lots of joy. I always hope we will celebrate many more Eids like this together. Eid Mubarak to you.💕";
+    let titleLetter = "To you";
+    let charArrDateLetter = datatxtletter.split('');
+    let charArrTitle = titleLetter.split('');
+    let currentIndexLetter = 0;
+    let currentIndexTitle = 0;
+    let text__letter = document.querySelector(".text__letter p");
+
+    var intervalContent;
+    var intervalTitle;
+
+    $("#btn__letter").on("click", function () {
+        if(mainMusic.muted) { mainMusic.muted = false; }
+        
+        mainMusic.pause();
+        mainMusic.currentTime = 0;
+        letterMusic.volume = 0.5;
+        letterMusic.play().then(() => {
+            musicIcon.className = 'fa-solid fa-pause';
+        });
+
+        $(".box__letter").slideDown();
+        setTimeout(function () { $(".letter__border").slideDown(); }, 1000);
+        setTimeout(function () {
+            intervalTitle = setInterval(function () {
+                if (currentIndexTitle < charArrTitle.length) {
+                    document.querySelector(".title__letter").textContent += charArrTitle[currentIndexTitle];
+                    let i = document.createElement("i");
+                    i.className = "fa-solid fa-heart";
+                    document.querySelector(".title__letter").appendChild(i);
+                    currentIndexTitle++;
+                } else {
+                    clearInterval(intervalTitle);
+                }
+            }, 100);
+        }, 2000);
+        setTimeout(function () {
+            document.querySelector("#heart__letter").classList.add("animationOp");
+            document.querySelector(".love__img").classList.add("animationOp");
+            document.querySelector("#mewmew").classList.add("animationOp");
+        }, 2800);
+        setTimeout(function () {
+            document.querySelectorAll(".heart").forEach((item) => {
+                item.classList.add("animation");
+            });
+        }, 3500);
+        setTimeout(function () {
+            intervalContent = setInterval(function () {
+                if (currentIndexLetter < charArrDateLetter.length) {
+                    if(text__letter) text__letter.textContent += charArrDateLetter[currentIndexLetter];
+                    currentIndexLetter++;
+                } else {
+                    clearInterval(intervalContent);
+                }
+            }, 50);
+        }, 6000);
+    });
+
+    $(".close").on("click", function () {
+        letterMusic.pause();
+        letterMusic.currentTime = 0;
+        mainMusic.play();
+        musicIcon.className = 'fa-solid fa-pause';
+
+        clearInterval(intervalContent);
+        document.querySelector(".title__letter").textContent = "";
+        if(text__letter) text__letter.textContent = "";
+        currentIndexLetter = 0;
+        currentIndexTitle = 0;
+        document.querySelector("#heart__letter").classList.remove("animationOp");
+        document.querySelector(".love__img").classList.remove("animationOp");
+        document.querySelector("#mewmew").classList.remove("animationOp");
+        document.querySelectorAll(".heart").forEach((item) => {
+            item.classList.remove("animation");
+        });
+        $(".box__letter").slideUp();
+        $(".letter__border").slideUp();
+    });
+
+    let mailBox  = document.querySelector('.mail');
+    let boxmail  = document.querySelector('.boxMail');
+    let closeBtn = document.querySelector('.fa-xmark');
+
+    mailBox.onclick = function () {
+        activateAudio();
+        mailBox.classList.toggle('active');
         boxmail.classList.add('active');
     };
-    closeBtn.onclick = function () {
-        boxmail.classList.remove('active');
-    };
 
-    // (أكمل بقية السكربت الخاص بك هنا...)
+    closeBtn.addEventListener('click', function () {
+        boxmail.classList.remove('active');
+    });
 </script>
+
 </html>
+
+```

@@ -37,6 +37,34 @@
             transition: transform 0.2s;
         }
         #music__btn:hover { transform: scale(1.1); }
+
+        .boxMail.active {
+            display: flex !important;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+        }
+
+        .boxMail-container {
+            width: 100%;
+            max-width: 90vw;
+        }
+
+        .card2 {
+            max-height: 75vh;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        .money-img {
+            width: 90%;
+            max-width: 220px;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            display: block;
+            margin: 15px auto;
+        }
     </style>
 </head>
 
@@ -166,11 +194,7 @@
                 <div class="card2">
                     <div class="card2-content">
                         <h3>Eid Mubarak!</h3>
-                        
-                        <div style="text-align: center; margin: 20px 0;">
-                            <img src="images/money.png" alt="Money" style="width: 90%; max-width: 350px; height: auto; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.2);">
-                        </div>
-                        
+                        <img src="money.png" alt="Money" class="money-img">
                         <div class="imageCute2">
                             <img src="cute2.png" alt="">
                         </div>

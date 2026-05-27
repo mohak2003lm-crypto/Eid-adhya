@@ -1,11 +1,3 @@
-أبشر، تم حل المشكلتين بشكل كامل وذكي:
-
-1. **حل مشكلة الصوت النهائي والأكيد:** المتصفحات تمنع الصوت تماماً حتى يضغط المستخدم على أي مكان. الحل المبتكر والناجح 100% هو جعل الصوت يبدأ **مكتوماً (Muted) وتلقائياً** فور فتح الصفحة (هذا مسموح به في كل المتصفحات)، وبمجرد أن يقوم المستخدم **بأي حركة أو لمسة أو ضغطة** على الصفحة، يتم رفع كتم الصوت تلقائياً ليعمل الصوت فوراً وبسلاسة دون أن يشعر المستخدم بالمنع.
-2. **تعديل مكان وحركة `money.png`:** قمت بتحديث خصائص الـ CSS لـ `.money__reveal` بحيث تخرج الفلوس من **داخل الظرف** وتصعد لأعلى وتكون موازية تماماً للظرف وبأنيميشن صعود انسيابي وجميل جداً.
-
-إليك الكود الكامل والمعدل جاهز للنسخ:
-
-```html
 <!DOCTYPE html>
 <html lang="en">
 
@@ -47,38 +39,42 @@
         #music__btn:hover { transform: scale(1.1); }
 
         @keyframes floatMoney {
-            0%, 100% { transform: translateY(-110px) translateX(-50%) rotate(0deg); }
-            50%       { transform: translateY(-125px) translateX(-50%) rotate(3deg); }
+            0%, 100% { transform: translateY(0px) rotate(-3deg); }
+            50%       { transform: translateY(-12px) rotate(3deg); }
         }
 
-        /* تعديل مكان الفلوس لتخرج موازية ومن داخل الظرف */
+        /* صورة الفلوس — مخفية في البداية */
         .money__reveal {
             position: absolute;
-            top: 40%; 
+            bottom: -160px;
             left: 50%;
-            transform: translateY(0px) translateX(-50%) scale(0);
+            transform: translateX(-50%) scale(0);
             opacity: 0;
-            transition: all 1s cubic-bezier(0.34, 1.56, 0.64, 1);
-            z-index: 1; /* خلف الواجهة الأمامية للبطاقة ليظهر كأنه يخرج من الداخل */
+            transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+            z-index: 10;
         }
-        
-        /* تأثير الصعود الموازي للظرف */
+        /* تظهر بعد فتح الظرف */
         .money__reveal.show {
             opacity: 1;
-            transform: translateY(-110px) translateX(-50%) scale(1);
-            animation: floatMoney 2.5s 1s infinite ease-in-out;
+            transform: translateX(-50%) scale(1);
+            animation: floatMoney 2.5s 0.8s infinite ease-in-out;
         }
         .money__reveal img {
-            width: 140px;
-            border-radius: 8px;
-            border: 3px solid white;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+            width: 150px;
+            border-radius: 14px;
+            border: 4px solid white;
+            box-shadow: 0 0 20px rgba(255, 120, 130, 0.7);
         }
     </style>
 </head>
 
 <body>
 
+    <!--
+        ملفات الموسيقى — ضعها في نفس مجلد index.html:
+        1. music.mp3         تشتغل عند فتح الصفحة
+        2. music_letter.mp3  تشتغل عند الضغط على Collect Money
+    -->
     <audio id="main__music" loop muted>
         <source src="music.mp3" type="audio/mpeg">
     </audio>
@@ -87,7 +83,7 @@
     </audio>
 
     <button id="music__btn" title="Toggle Music">
-        <i class="fa-solid fa-play"></i>
+        <i class="fa-solid fa-pause"></i>
     </button>
 
     <div id="wrapper">
@@ -136,7 +132,7 @@
             <div class="right">
                 <div class="box__account">
                     <div class="image">
-                        <img src="./images/named.png" alt="">
+                        <img src="./images/unnamed.png" alt="">
                     </div>
                     <div class="name">
                         <i class="fa-solid fa-heart"></i>
@@ -193,12 +189,13 @@
         <div class="boxMail">
             <i class="fa-solid fa-xmark"></i>
             <div class="boxMail-container">
-                <div class="card1" style="position: relative; overflow: visible;">
+                <div class="card1">
                     <div class="userImg">
-                        <img src="images/named.png" alt="">
+                        <img src="images/unnamed.png" alt="">
                     </div>
                     <h4 class="username">To: Noura 💖<span class="underline"></span></h4>
                     <h3>Happy Eid</h3>
+                    <!-- صورة الفلوس تظهر بعد فتح الظرف -->
                     <div class="money__reveal" id="money__reveal">
                         <img src="money.png" alt="Eid Money">
                     </div>
@@ -231,37 +228,19 @@
     const musicBtn    = document.getElementById('music__btn');
     const musicIcon   = musicBtn.querySelector('i');
 
-    // تشغيل فوري صامت لتخطي جدار الحماية للمتصفح
-    mainMusic.play().catch(e => console.log("Autoplay context setup"));
-
-    // بمجرد أن يلمس المستخدم الشاشة أو يحرك الماوس أو يضغط، يشتغل الصوت فوراً
-    function activateAudio() {
-        if (mainMusic.muted) {
+    // تشغيل تلقائي عند فتح الصفحة — muted أولاً لتجاوز قيود المتصفح
+    mainMusic.muted = true;
+    mainMusic.play().then(() => {
+        // بعد ثانية واحدة يرفع الصوت تلقائياً
+        setTimeout(() => {
             mainMusic.muted = false;
             mainMusic.volume = 0.5;
-            // للتأكد من أنه يعمل إذا كان قد توقف مؤقتاً
-            mainMusic.play().then(() => {
-                musicIcon.className = 'fa-solid fa-pause';
-            });
-        }
-    }
-
-    // الاستماع لكل أنواع تفاعلات المستخدم لضمان التشغيل الفوري والسريع
-    window.addEventListener('click', activateAudio, { once: true });
-    window.addEventListener('touchstart', activateAudio, { once: true });
-    window.addEventListener('mousemove', activateAudio, { once: true });
-    window.addEventListener('keydown', activateAudio, { once: true });
+        }, 1000);
+    }).catch(() => {});
 
     // زر التحكم بالموسيقى
     musicBtn.addEventListener('click', function (e) {
         e.stopPropagation();
-        
-        // إذا كان يشتغل صامت نقوم بإلغاء الصمت أولاً
-        if(mainMusic.muted) {
-            mainMusic.muted = false;
-            mainMusic.volume = 0.5;
-        }
-
         const active = !mainMusic.paused ? mainMusic : letterMusic;
         if (active.paused) {
             active.play();
@@ -278,6 +257,7 @@
     let currentIndex = 0;
     let date__of__birth = document.querySelector(".date__of__birth span");
 
+    // يظهر بعد اكتمال animation الصندوق (9s بداية + 5s مدة = 14s) + تأخير إضافي
     setTimeout(function () {
         date__of__birth.style.opacity = '1';
         let timeDatetxt = setInterval(function () {
@@ -308,15 +288,12 @@
     var intervalTitle;
 
     $("#btn__letter").on("click", function () {
-        // تفعل في حال لم يتفعل الصوت سابقاً
-        if(mainMusic.muted) { mainMusic.muted = false; }
-        
+        // إيقاف الأغنية الأولى وتشغيل الثانية
         mainMusic.pause();
         mainMusic.currentTime = 0;
         letterMusic.volume = 0.5;
-        letterMusic.play().then(() => {
-            musicIcon.className = 'fa-solid fa-pause';
-        });
+        letterMusic.play();
+        musicIcon.className = 'fa-solid fa-pause';
 
         $(".box__letter").slideDown();
         setTimeout(function () { $(".letter__border").slideDown(); }, 1000);
@@ -346,7 +323,7 @@
         setTimeout(function () {
             intervalContent = setInterval(function () {
                 if (currentIndexLetter < charArrDateLetter.length) {
-                    if(text__letter) text__letter.textContent += charArrDateLetter[currentIndexLetter];
+                    text__letter.textContent += charArrDateLetter[currentIndexLetter];
                     currentIndexLetter++;
                 } else {
                     clearInterval(intervalContent);
@@ -356,6 +333,7 @@
     });
 
     $(".close").on("click", function () {
+        // إيقاف أغنية الظرف والرجوع للأغنية الأولى
         letterMusic.pause();
         letterMusic.currentTime = 0;
         mainMusic.play();
@@ -363,7 +341,7 @@
 
         clearInterval(intervalContent);
         document.querySelector(".title__letter").textContent = "";
-        if(text__letter) text__letter.textContent = "";
+        text__letter.textContent = "";
         currentIndexLetter = 0;
         currentIndexTitle = 0;
         document.querySelector("#heart__letter").classList.remove("animationOp");
@@ -376,29 +354,25 @@
         $(".letter__border").slideUp();
     });
 
-    // ── MAIL BOX — فتح صندوق البريد وحركة الفلوس ──────
+    // ── MAIL BOX — صورة money.png تظهر بعد فتح الظرف ──────
     let mailBox  = document.querySelector('.mail');
     let boxmail  = document.querySelector('.boxMail');
     let closeBtn = document.querySelector('.fa-xmark');
 
     mailBox.onclick = function () {
-        // تشغيل صوت التفعيل الاحتياطي عند الضغط
-        activateAudio();
         mailBox.classList.toggle('active');
         boxmail.classList.add('active');
-        
-        // تظهر الفلوس صاعدة بشكل موازي بعد فتح الظرف بـ 1.2 ثانية
+        // )
         setTimeout(() => {
             moneyReveal.classList.add('show');
-        }, 1200);
+        }, 1500);
     };
 
     closeBtn.addEventListener('click', function () {
         boxmail.classList.remove('active');
+        // إخفاء الصورة عند الإغلاق
         moneyReveal.classList.remove('show');
     });
 </script>
 
 </html>
-
-```
